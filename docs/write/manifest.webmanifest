@@ -2,7 +2,7 @@
   "name": "Inkstand",
   "short_name": "Inkstand",
   "description": "Write a draft, then revise it. Works offline, in English and nine Indian languages.",
-  "id": "./",
+  "id": "../",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",

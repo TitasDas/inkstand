@@ -47,7 +47,7 @@ After the first visit Inkstand works without a connection. It saves to your devi
 
 ## Install it
 
-Open https://titasdas.github.io/inkstand/ in Chrome on Android, or Safari on iPhone and iPad, and choose Add to Home screen. It then opens like any other app, with or without a connection.
+Open https://titasdas.github.io/inkstand/write/ in Chrome on Android, or Safari on iPhone and iPad, and choose Add to Home screen. It then opens like any other app, with or without a connection.
 
 ## Feedback
 

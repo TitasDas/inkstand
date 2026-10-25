@@ -1,204 +1,208 @@
 <!doctype html>
-<html lang="en" data-mode="write">
+<html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
-<meta name="theme-color" content="#1f4e79" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#14181d" media="(prefers-color-scheme: dark)">
-<meta name="description" content="Write a draft, then revise it. Inkstand works offline on phones, tablets and computers, in English and nine Indian languages.">
-<title>Inkstand</title>
-<link rel="manifest" href="manifest.webmanifest">
-<link rel="icon" href="icons/icon.svg" type="image/svg+xml">
-<link rel="apple-touch-icon" href="icons/icon-192.png">
-<link rel="stylesheet" href="app.031a2cba52.css">
-<script type="module" src="app.189a9338cd.js"></script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#1f4e79" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#14181d" media="(prefers-color-scheme: dark)">
+  <meta name="description" content="Inkstand is a free writing tool. Draft in Write mode, then let Revise mode show you the rhythm of your sentences and the habits worth a second look. Works offline, in English and nine Indian languages.">
+  <title>Inkstand: write a draft, then revise it</title>
+  <link rel="icon" href="write/icons/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="write/icons/icon-192.png">
+  <script>
+    // Home-screen installs made before the app moved to write/ still open this page. Send them on.
+    if (matchMedia("(display-mode: standalone)").matches || navigator.standalone) location.replace("write/");
+  </script>
+  <style>
+    :root {
+      --bg: #f1f2f4;
+      --surface: #ffffff;
+      --text: #1c2128;
+      --muted: #5b6573;
+      --border: #d9dde3;
+      --accent: #1f4e79;
+      --accent-text: #ffffff;
+      --accent-soft: #dce8f4;
+      --ui-font: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans", sans-serif;
+      --serif: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, "Noto Serif", serif;
+      color-scheme: light;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #0f1216;
+        --surface: #171b21;
+        --text: #e6e9ee;
+        --muted: #9aa4b2;
+        --border: #2c333d;
+        --accent: #7fb3e3;
+        --accent-text: #0b1520;
+        --accent-soft: #1d2f42;
+        color-scheme: dark;
+      }
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font: 17px/1.6 var(--ui-font);
+      padding: env(safe-area-inset-top, 0px) 0 env(safe-area-inset-bottom, 0px);
+    }
+    .wrap { max-width: 68rem; margin: 0 auto; padding-inline: max(1.25rem, env(safe-area-inset-left, 0px)); }
+    img { max-width: 100%; height: auto; display: block; border-radius: 0.75rem; border: 1px solid var(--border); }
+    a { color: var(--accent); }
+    h1, h2, h3 { font-family: var(--serif); font-weight: 600; line-height: 1.2; }
+    h1 { font-size: clamp(2.4rem, 6vw, 3.6rem); margin: 0 0 0.75rem; }
+    h2 { font-size: clamp(1.6rem, 3.5vw, 2.1rem); margin: 0 0 1rem; }
+    h3 { font-size: 1.2rem; margin: 0 0 0.35rem; }
+    p { margin: 0 0 1rem; }
+    .lede { font-size: 1.2rem; color: var(--muted); max-width: 38rem; }
+
+    header.top { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding-block: 1rem; }
+    .brand { display: flex; align-items: center; gap: 0.6rem; font-family: var(--serif); font-size: 1.3rem; font-weight: 600; color: var(--text); text-decoration: none; }
+    .brand img { width: 2rem; height: 2rem; border: 0; border-radius: 0.4rem; }
+    nav a { margin-left: 1.1rem; color: var(--muted); text-decoration: none; }
+    nav a:hover { color: var(--text); }
+    @media (max-width: 40rem) { nav .opt { display: none; } }
+
+    .btn {
+      display: inline-flex; align-items: center; min-height: 48px; padding: 0 1.5rem;
+      background: var(--accent); color: var(--accent-text); border-radius: 999px;
+      font-weight: 600; text-decoration: none; font-size: 1.05rem;
+    }
+    .btn:hover { filter: brightness(1.08); }
+    .btn.small { min-height: 40px; padding: 0 1.1rem; font-size: 0.95rem; }
+
+    .hero { display: grid; grid-template-columns: 1fr 1.3fr; gap: 3rem; align-items: center; padding-block: 3rem 4rem; }
+    .hero .meta { color: var(--muted); font-size: 0.95rem; margin-top: 1rem; }
+    @media (max-width: 52rem) { .hero { grid-template-columns: 1fr; gap: 2rem; padding-block: 1.5rem 3rem; } }
+
+    section { padding-block: 3.5rem; border-top: 1px solid var(--border); }
+    .two { display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem; align-items: start; }
+    @media (max-width: 52rem) { .two { grid-template-columns: 1fr; } }
+    .card { background: var(--surface); border: 1px solid var(--border); border-radius: 0.9rem; padding: 1.4rem 1.5rem; }
+    .card p:last-child { margin-bottom: 0; }
+    .phones { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-top: 2rem; }
+    @media (max-width: 30rem) { .phones { grid-template-columns: 1fr 1fr; } .phones img:last-child { display: none; } }
+
+    ol.tips { list-style: none; counter-reset: tip; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr)); gap: 1rem; }
+    ol.tips li { counter-increment: tip; background: var(--surface); border: 1px solid var(--border); border-radius: 0.9rem; padding: 1.2rem 1.3rem; }
+    ol.tips li::before { content: counter(tip); display: inline-grid; place-items: center; width: 1.8rem; height: 1.8rem; border-radius: 50%; background: var(--accent-soft); color: var(--accent); font-weight: 700; font-size: 0.9rem; margin-bottom: 0.6rem; }
+    ol.tips p { margin: 0; color: var(--muted); }
+    kbd { font: 0.85em var(--ui-font); padding: 0.1em 0.4em; border: 1px solid var(--border); border-bottom-width: 2px; border-radius: 0.3rem; background: var(--surface); }
+
+    .langs { font-size: 1.15rem; line-height: 2; }
+    dl.faq dt { font-weight: 600; margin-top: 1.2rem; }
+    dl.faq dd { margin: 0.2rem 0 0; color: var(--muted); }
+    .cta { text-align: center; }
+    .cta .lede { margin-inline: auto; }
+    footer { padding-block: 2rem 3rem; color: var(--muted); font-size: 0.95rem; border-top: 1px solid var(--border); }
+  </style>
 </head>
 <body>
-<svg class="sprite" aria-hidden="true" focusable="false">
-<symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></symbol>
-<symbol id="i-back" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></symbol>
-<symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
-<symbol id="i-history" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7M3 4v4h4M12 7v5l3 3"/></symbol>
-<symbol id="i-more" viewBox="0 0 24 24"><circle cx="12" cy="5" r="1.4"/><circle cx="12" cy="12" r="1.4"/><circle cx="12" cy="19" r="1.4"/></symbol>
-<symbol id="i-undo" viewBox="0 0 24 24"><path d="M9 14L4 9l5-5M4 9h10a6 6 0 0 1 0 12h-3"/></symbol>
-<symbol id="i-redo" viewBox="0 0 24 24"><path d="M15 14l5-5-5-5M20 9H10a6 6 0 0 0 0 12h3"/></symbol>
-<symbol id="i-ul" viewBox="0 0 24 24"><path d="M9 6h11M9 12h11M9 18h11"/><circle cx="4.5" cy="6" r="1.2"/><circle cx="4.5" cy="12" r="1.2"/><circle cx="4.5" cy="18" r="1.2"/></symbol>
-<symbol id="i-ol" viewBox="0 0 24 24"><path d="M10 6h10M10 12h10M10 18h10M4 4.5h1.5V9M3.5 9h3M3.5 14.5c.4-.6 1-1 1.7-1 .8 0 1.4.5 1.4 1.2 0 1.2-3.1 2.1-3.1 4.3h3.2"/></symbol>
-<symbol id="i-quote" viewBox="0 0 24 24"><path d="M7 7h4v4c0 3-1.5 5-4 6M15 7h4v4c0 3-1.5 5-4 6"/></symbol>
-<symbol id="i-settings" viewBox="0 0 24 24"><path d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></symbol>
-<symbol id="i-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></symbol>
-<symbol id="i-trash" viewBox="0 0 24 24"><path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/></symbol>
-<symbol id="i-download" viewBox="0 0 24 24"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></symbol>
-<symbol id="i-open" viewBox="0 0 24 24"><path d="M3 7h6l2 2h10v10H3z"/></symbol>
-<symbol id="i-focus" viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></symbol>
-<symbol id="i-guide" viewBox="0 0 24 24"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2zM4 21V5M8 7h7M8 11h7"/></symbol>
-<symbol id="i-practice" viewBox="0 0 24 24"><path d="M14 4l6 6-10 10H4v-6zM12 6l6 6"/></symbol>
-<symbol id="i-notes" viewBox="0 0 24 24"><path d="M5 4h14v12l-4 4H5zM15 20v-4h4M8 8h8M8 12h5"/></symbol>
-</svg>
-<div class="app" id="app" data-view="editor">
-<aside class="sidebar" id="sidebar" aria-labelledby="docs-heading">
-<header class="sidebar-head">
-<h1 id="docs-heading" data-i18n="documents">Documents</h1>
-<button class="icon-btn" id="settingsBtn" data-i18n-label="settings"><svg><use href="#i-settings"/></svg></button>
-<button class="primary-btn" id="newDocBtn"><svg><use href="#i-plus"/></svg><span data-i18n="newDocument">New document</span></button>
-</header>
-<ul class="doc-list" id="docList" role="list"></ul>
-</aside>
-<main class="main">
-<header class="topbar">
-<button class="icon-btn only-narrow" id="showListBtn" data-i18n-label="documents"><svg><use href="#i-back"/></svg></button>
-<input class="title-input" id="titleInput" type="text" autocomplete="off" data-i18n-placeholder="titlePlaceholder" data-i18n-label="titlePlaceholder" maxlength="200">
-<div class="mode-switch" role="radiogroup" data-i18n-label="mode">
-<button type="button" role="radio" id="writeModeBtn" data-mode="write" aria-checked="true" data-i18n="write">Write</button>
-<button type="button" role="radio" id="reviseModeBtn" data-mode="revise" aria-checked="false" data-i18n="revise">Revise</button>
-</div>
-<button class="icon-btn only-wide" id="focusBtn" data-i18n-label="focus" aria-pressed="false"><svg><use href="#i-focus"/></svg></button>
-<button class="icon-btn" id="historyBtn" data-i18n-label="history"><svg><use href="#i-history"/></svg></button>
-<button class="icon-btn" id="moreBtn" data-i18n-label="more" aria-haspopup="dialog"><svg><use href="#i-more"/></svg></button>
-</header>
-<div class="toolbar" role="toolbar" id="toolbar" data-i18n-label="menu">
-<button data-cmd="undo" data-i18n-label="undo"><svg><use href="#i-undo"/></svg></button>
-<button data-cmd="redo" data-i18n-label="redo"><svg><use href="#i-redo"/></svg></button>
-<span class="sep" aria-hidden="true"></span>
-<button data-cmd="bold" data-i18n-label="bold" aria-pressed="false"><b>B</b></button>
-<button data-cmd="italic" data-i18n-label="italic" aria-pressed="false"><i>I</i></button>
-<button data-cmd="underline" data-i18n-label="underline" aria-pressed="false"><u>U</u></button>
-<button data-cmd="strikeThrough" data-i18n-label="strike" aria-pressed="false"><s>S</s></button>
-<span class="sep" aria-hidden="true"></span>
-<button data-block="h1" data-i18n-label="heading1" aria-pressed="false">H1</button>
-<button data-block="h2" data-i18n-label="heading2" aria-pressed="false">H2</button>
-<button data-block="p" data-i18n-label="paragraph" aria-pressed="false">¶</button>
-<button data-block="blockquote" data-i18n-label="quote" aria-pressed="false"><svg><use href="#i-quote"/></svg></button>
-<span class="sep" aria-hidden="true"></span>
-<button data-cmd="insertUnorderedList" data-i18n-label="bulletList" aria-pressed="false"><svg><use href="#i-ul"/></svg></button>
-<button data-cmd="insertOrderedList" data-i18n-label="numberedList" aria-pressed="false"><svg><use href="#i-ol"/></svg></button>
-</div>
-<div class="page-scroll" id="pageScroll">
-<article class="editor" id="editor" contenteditable="true" spellcheck="true" role="textbox" aria-multiline="true" data-i18n-placeholder="writePlaceholder" data-i18n-label="writePlaceholder"></article>
-</div>
-<button class="notes-fab" id="notesFab" type="button" hidden><svg><use href="#i-notes"/></svg><span id="notesFabText"></span></button>
-<footer class="statusbar">
-<span id="saveStatus" role="status" aria-live="polite"></span>
-<span id="wordCount" class="count"></span>
-</footer>
-</main>
-<aside class="revise" id="revisePanel" aria-labelledby="revise-heading">
-<header class="revise-head">
-<h2 id="revise-heading" data-i18n="revise">Revise</h2>
-<button class="secondary-btn only-narrow" id="closeReviseBtn" type="button" data-i18n="backToWriting">Back to writing</button>
-</header>
-<div class="revise-body">
-<section class="r-card">
-<label for="argumentInput" class="r-title" data-i18n="argument">Central argument</label>
-<p class="r-hint" data-i18n="argumentHint"></p>
-<textarea id="argumentInput" rows="3" maxlength="600"></textarea>
-<p class="r-meta" id="argumentCount" aria-live="polite"></p>
-</section>
-<section class="r-card">
-<h3 class="r-title" data-i18n="rhythm">Rhythm</h3>
-<p class="r-hint" data-i18n="rhythmHint"></p>
-<div class="rhythm-strip" id="rhythmStrip" role="img"></div>
-<ul class="legend" id="rhythmLegend" role="list"></ul>
-<label class="check"><input type="checkbox" id="rhythmToggle" checked> <span data-i18n="showRhythm"></span></label>
-<p class="r-meta" id="reviseStats"></p>
-</section>
-<section class="r-card">
-<h3 class="r-title" data-i18n="notes">Notes</h3>
-<p class="r-hint" id="englishNote" data-i18n="englishOnly" hidden></p>
-<div id="findingList"></div>
-</section>
-<section class="r-card">
-<h3 class="r-title" data-i18n="openingEnding">Opening and ending</h3>
-<p class="r-hint" data-i18n="openingQ"></p>
-<blockquote class="r-excerpt" id="openingText"></blockquote>
-<p class="r-hint" data-i18n="endingQ"></p>
-<blockquote class="r-excerpt" id="endingText"></blockquote>
-</section>
-<div class="r-actions">
-<button class="secondary-btn" id="guideBtn" type="button"><svg><use href="#i-guide"/></svg><span data-i18n="guide">Craft guide</span></button>
-<button class="secondary-btn" id="practiceBtn" type="button"><svg><use href="#i-practice"/></svg><span data-i18n="practice">Practice sheet</span></button>
-</div>
-</div>
-</aside>
-</div>
-<dialog class="sheet" id="moreDialog">
-<form method="dialog" class="sheet-body">
-<h2 data-i18n="export">Export</h2>
-<button value="docx" class="row-btn"><svg><use href="#i-download"/></svg><span data-i18n="exportDocx"></span></button>
-<button value="html" class="row-btn"><svg><use href="#i-download"/></svg><span data-i18n="exportHtml"></span></button>
-<button value="txt" class="row-btn"><svg><use href="#i-download"/></svg><span data-i18n="exportTxt"></span></button>
-<hr>
-<button value="import" class="row-btn"><svg><use href="#i-open"/></svg><span data-i18n="import"></span></button>
-<button value="settings" class="row-btn"><svg><use href="#i-settings"/></svg><span data-i18n="settings"></span></button>
-<button value="delete" class="row-btn danger"><svg><use href="#i-trash"/></svg><span data-i18n="delete"></span></button>
-<button value="cancel" class="row-btn subtle"><svg><use href="#i-close"/></svg><span data-i18n="close"></span></button>
-</form>
-</dialog>
-<dialog class="sheet" id="historyDialog">
-<div class="sheet-body">
-<div class="sheet-head">
-<h2 data-i18n="history">Version history</h2>
-<button class="icon-btn" data-close data-i18n-label="close"><svg><use href="#i-close"/></svg></button>
-</div>
-<ul class="history-list" id="historyList" role="list"></ul>
-</div>
-</dialog>
-<dialog class="sheet" id="settingsDialog">
-<div class="sheet-body">
-<div class="sheet-head">
-<h2 data-i18n="settings">Settings</h2>
-<button class="icon-btn" data-close data-i18n-label="close"><svg><use href="#i-close"/></svg></button>
-</div>
-<label class="field">
-<span data-i18n="language">Language</span>
-<select id="languageSelect"></select>
-</label>
-<label class="field">
-<span data-i18n="theme">Theme</span>
-<select id="themeSelect">
-<option value="system" data-i18n="themeSystem">Match device</option>
-<option value="light" data-i18n="themeLight">Light</option>
-<option value="sepia" data-i18n="themeSepia">Paper</option>
-<option value="dark" data-i18n="themeDark">Dark</option>
-</select>
-</label>
-<label class="field">
-<span data-i18n="pageFont">Page font</span>
-<select id="fontSelect">
-<option value="serif" data-i18n="fontSerif">Serif</option>
-<option value="sans" data-i18n="fontSans">Sans serif</option>
-</select>
-</label>
-<div class="field">
-<span data-i18n="textSize">Text size</span>
-<div class="stepper">
-<button class="icon-btn" id="smallerBtn" data-i18n-label="smaller">A−</button>
-<output id="textSizeValue"></output>
-<button class="icon-btn" id="largerBtn" data-i18n-label="larger">A+</button>
-</div>
-</div>
-</div>
-</dialog>
-<dialog class="sheet guide-sheet" id="guideDialog">
-<div class="sheet-body">
-<div class="sheet-head">
-<h2 data-i18n="guide">Craft guide</h2>
-<button class="icon-btn" data-close data-i18n-label="close"><svg><use href="#i-close"/></svg></button>
-</div>
-<p class="r-hint" data-i18n="guideEnglish"></p>
-<div class="guide-body" id="guideBody" lang="en"></div>
-</div>
-</dialog>
-<dialog class="sheet" id="confirmDialog">
-<form method="dialog" class="sheet-body">
-<p id="confirmText"></p>
-<div class="actions">
-<button value="cancel" class="secondary-btn" data-i18n="cancel">Cancel</button>
-<button value="ok" class="danger-btn" id="confirmOk" data-i18n="delete">Delete</button>
-</div>
-</form>
-</dialog>
-<input type="file" id="fileInput" accept=".docx,.html,.htm,.txt,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/html,text/plain" hidden>
-<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+  <div class="wrap">
+    <header class="top">
+      <a class="brand" href="./"><img src="write/icons/icon.svg" alt="">Inkstand</a>
+      <nav>
+        <a class="opt" href="#how">How it works</a>
+        <a class="opt" href="#tips">Tips</a>
+        <a class="btn small" href="write/">Open Inkstand</a>
+      </nav>
+    </header>
+
+    <div class="hero">
+      <div>
+        <h1>Write a draft, then revise it until it says what you mean.</h1>
+        <p class="lede">Inkstand is a quiet place to write. Get the first draft down without distractions, then switch to Revise and see how the piece actually reads.</p>
+        <a class="btn" href="write/">Start writing</a>
+        <p class="meta">Free. No sign-up. Works offline once it has loaded, and what you write stays on your device.</p>
+      </div>
+      <img src="shots/tablet-revise-english.png" width="1707" height="1068" alt="Revise mode: sentences coloured by length, notes underlined in the text, and the central argument, rhythm chart and notes in a side panel">
+    </div>
+  </div>
+
+  <section id="how">
+    <div class="wrap">
+      <h2>Two modes: Write and Revise</h2>
+      <div class="two">
+        <div class="card">
+          <h3>Write</h3>
+          <p>A blank page with a few formatting buttons and nothing else. No notes, no suggestions, no score. The only job here is getting the whole draft down.</p>
+          <p>On a tablet or computer, Focus dims every paragraph except the one you're on.</p>
+        </div>
+        <div class="card">
+          <h3>Revise</h3>
+          <p>Inkstand reads the draft and leaves notes. Every sentence is coloured by its length, so a run of sentences that all sound the same is easy to spot.</p>
+          <p>A box asks for your central argument in 30 words or fewer. The notes point out clichés, feelings you told instead of showed, vague words, punctuation slips, and the habits that make writing sound machine-made, like "It's not X, it's Y."</p>
+          <p>Tap a note to jump to the words. "Why?" opens a short craft guide, and there's a practice sheet with exercises to warm up on.</p>
+        </div>
+      </div>
+      <div class="phones">
+        <img src="shots/phone-editor-hindi.png" width="824" height="1678" loading="lazy" alt="Writing a travel plan in Hindi on a phone">
+        <img src="shots/phone-revise-english.png" width="824" height="1678" loading="lazy" alt="Revise mode on a phone">
+        <img src="shots/phone-notes-english.png" width="824" height="1678" loading="lazy" alt="The list of notes on a phone">
+      </div>
+    </div>
+  </section>
+
+  <section id="tips">
+    <div class="wrap">
+      <h2>Tips for getting the most out of it</h2>
+      <ol class="tips">
+        <li><h3>Finish the draft first</h3><p>Stay in Write until the whole piece is down, even if it's rough. Fixing sentences you might delete later is wasted effort.</p></li>
+        <li><h3>Pin down your argument</h3><p>Fill in the central argument box before reading the notes. If it won't fit in 30 words, the draft probably wanders too, and that's the first thing to fix.</p></li>
+        <li><h3>Read the colours</h3><p>A long stretch of one colour means sentences of the same length, and the prose will feel flat. Split one long sentence or join two short ones.</p></li>
+        <li><h3>Treat notes as questions</h3><p>Every note is something to look at again, not an error. If you meant it, keep it. The notes come from plain rules, not from an AI.</p></li>
+        <li><h3>Use Focus when you're stuck</h3><p>Turn on Focus to dim everything but the paragraph you're writing. Press <kbd>Esc</kbd> to leave it.</p></li>
+        <li><h3>Save versions as you go</h3><p>Press <kbd>Ctrl</kbd>+<kbd>S</kbd> (<kbd>⌘</kbd>+<kbd>S</kbd> on a Mac) to keep a version. Inkstand also keeps one when you switch documents or leave the page. Version history lets you go back.</p></li>
+        <li><h3>Export to keep a copy</h3><p>Your documents live in this browser on this device. Clearing the browser's site data deletes them, so export anything you care about to Word, a web page or plain text.</p></li>
+        <li><h3>Add it to your home screen</h3><p>Open Inkstand, then in Chrome on Android, or Safari on iPhone and iPad, choose Add to Home screen. Inkstand then opens like an app, with or without a connection.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap two">
+      <div>
+        <h2>In your language</h2>
+        <p>The interface opens in your device's language when it can, and you can change it in Settings.</p>
+        <p class="langs">English · हिन्दी · বাংলা · मराठी · தமிழ் · తెలుగు · ગુજરાતી · ಕನ್ನಡ · മലയാളം · ਪੰਜਾਬੀ</p>
+        <p>Rhythm and punctuation notes work in all of them, the Hindi danda included. The word-level notes read English for now.</p>
+      </div>
+      <img src="shots/tablet-focus-paper.png" width="1707" height="1068" loading="lazy" alt="Focus mode on the Paper theme: only the paragraph being written is at full strength">
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <h2>Questions</h2>
+      <dl class="faq">
+        <dt>Does it cost anything?</dt>
+        <dd>No. There's no account, no ads and nothing to buy.</dd>
+        <dt>Where does my writing go?</dt>
+        <dd>Nowhere. It's saved on your device as you type and never uploaded. Nobody else can read it, me included.</dd>
+        <dt>Does it use AI?</dt>
+        <dd>No. The notes come from rules that run in your browser, so they work offline and give the same answer every time.</dd>
+        <dt>Can I use it on my phone?</dt>
+        <dd>Yes. It works on phones, tablets and computers. Focus mode is for larger screens, and everything else works everywhere.</dd>
+        <dt>How do I move my writing to another device?</dt>
+        <dd>Export it on one device, then use Import on the other. It reads Word, web page and plain text files. There's no sync, because there's no server.</dd>
+      </dl>
+    </div>
+  </section>
+
+  <section class="cta">
+    <div class="wrap">
+      <h2>Ready when you are</h2>
+      <p class="lede">Open it, start typing, and switch to Revise when the draft is done.</p>
+      <a class="btn" href="write/">Start writing</a>
+    </div>
+  </section>
+
+  <footer>
+    <div class="wrap">
+      <p>Made by Titas Das. If something breaks or a note is plainly wrong, please <a href="https://github.com/TitasDas/inkstand/issues">open an issue</a>.</p>
+    </div>
+  </footer>
 </body>
 </html>
