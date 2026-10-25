@@ -3,205 +3,619 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#1f4e79" media="(prefers-color-scheme: light)">
-  <meta name="theme-color" content="#14181d" media="(prefers-color-scheme: dark)">
-  <meta name="description" content="Inkstand is a free writing tool. Draft in Write mode, then let Revise mode show you the rhythm of your sentences and the habits worth a second look. Works offline, in English and nine Indian languages.">
-  <title>Inkstand: write a draft, then revise it</title>
+  <meta name="theme-color" content="#f6f1e6" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#15131c" media="(prefers-color-scheme: dark)">
+  <meta name="description" content="Inkstand is a free, calm place to write. Write your first draft, then tap Revise to see, in colour and plain words, where your writing could be clearer. Works without internet, in English and nine Indian languages.">
+  <title>Inkstand: a calm place to write</title>
   <link rel="icon" href="write/icons/icon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="write/icons/icon-192.png">
   <script>
     // Home-screen installs made before the app moved to write/ still open this page. Send them on.
     if (matchMedia("(display-mode: standalone)").matches || navigator.standalone) location.replace("write/");
   </script>
-  <style>
-    :root {
-      --bg: #f1f2f4;
-      --surface: #ffffff;
-      --text: #1c2128;
-      --muted: #5b6573;
-      --border: #d9dde3;
-      --accent: #1f4e79;
-      --accent-text: #ffffff;
-      --accent-soft: #dce8f4;
-      --ui-font: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans", sans-serif;
-      --serif: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, "Noto Serif", serif;
-      color-scheme: light;
-    }
-    @media (prefers-color-scheme: dark) {
-      :root {
-        --bg: #0f1216;
-        --surface: #171b21;
-        --text: #e6e9ee;
-        --muted: #9aa4b2;
-        --border: #2c333d;
-        --accent: #7fb3e3;
-        --accent-text: #0b1520;
-        --accent-soft: #1d2f42;
-        color-scheme: dark;
-      }
-    }
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      background: var(--bg);
-      color: var(--text);
-      font: 17px/1.6 var(--ui-font);
-      padding: env(safe-area-inset-top, 0px) 0 env(safe-area-inset-bottom, 0px);
-    }
-    .wrap { max-width: 68rem; margin: 0 auto; padding-inline: max(1.25rem, env(safe-area-inset-left, 0px)); }
-    img { max-width: 100%; height: auto; display: block; border-radius: 0.75rem; border: 1px solid var(--border); }
-    a { color: var(--accent); }
-    h1, h2, h3 { font-family: var(--serif); font-weight: 600; line-height: 1.2; }
-    h1 { font-size: clamp(2.4rem, 6vw, 3.6rem); margin: 0 0 0.75rem; }
-    h2 { font-size: clamp(1.6rem, 3.5vw, 2.1rem); margin: 0 0 1rem; }
-    h3 { font-size: 1.2rem; margin: 0 0 0.35rem; }
-    p { margin: 0 0 1rem; }
-    .lede { font-size: 1.2rem; color: var(--muted); max-width: 38rem; }
-
-    header.top { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding-block: 1rem; }
-    .brand { display: flex; align-items: center; gap: 0.6rem; font-family: var(--serif); font-size: 1.3rem; font-weight: 600; color: var(--text); text-decoration: none; }
-    .brand img { width: 2rem; height: 2rem; border: 0; border-radius: 0.4rem; }
-    nav a { margin-left: 1.1rem; color: var(--muted); text-decoration: none; }
-    nav a:hover { color: var(--text); }
-    @media (max-width: 40rem) { nav .opt { display: none; } }
-
-    .btn {
-      display: inline-flex; align-items: center; min-height: 48px; padding: 0 1.5rem;
-      background: var(--accent); color: var(--accent-text); border-radius: 999px;
-      font-weight: 600; text-decoration: none; font-size: 1.05rem;
-    }
-    .btn:hover { filter: brightness(1.08); }
-    .btn.small { min-height: 40px; padding: 0 1.1rem; font-size: 0.95rem; }
-
-    .hero { display: grid; grid-template-columns: 1fr 1.3fr; gap: 3rem; align-items: center; padding-block: 3rem 4rem; }
-    .hero .meta { color: var(--muted); font-size: 0.95rem; margin-top: 1rem; }
-    @media (max-width: 52rem) { .hero { grid-template-columns: 1fr; gap: 2rem; padding-block: 1.5rem 3rem; } }
-
-    section { padding-block: 3.5rem; border-top: 1px solid var(--border); }
-    .two { display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem; align-items: start; }
-    @media (max-width: 52rem) { .two { grid-template-columns: 1fr; } }
-    .card { background: var(--surface); border: 1px solid var(--border); border-radius: 0.9rem; padding: 1.4rem 1.5rem; }
-    .card p:last-child { margin-bottom: 0; }
-    .phones { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-top: 2rem; }
-    @media (max-width: 30rem) { .phones { grid-template-columns: 1fr 1fr; } .phones img:last-child { display: none; } }
-
-    ol.tips { list-style: none; counter-reset: tip; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr)); gap: 1rem; }
-    ol.tips li { counter-increment: tip; background: var(--surface); border: 1px solid var(--border); border-radius: 0.9rem; padding: 1.2rem 1.3rem; }
-    ol.tips li::before { content: counter(tip); display: inline-grid; place-items: center; width: 1.8rem; height: 1.8rem; border-radius: 50%; background: var(--accent-soft); color: var(--accent); font-weight: 700; font-size: 0.9rem; margin-bottom: 0.6rem; }
-    ol.tips p { margin: 0; color: var(--muted); }
-    kbd { font: 0.85em var(--ui-font); padding: 0.1em 0.4em; border: 1px solid var(--border); border-bottom-width: 2px; border-radius: 0.3rem; background: var(--surface); }
-
-    .langs { font-size: 1.15rem; line-height: 2; }
-    dl.faq dt { font-weight: 600; margin-top: 1.2rem; }
-    dl.faq dd { margin: 0.2rem 0 0; color: var(--muted); }
-    .cta { text-align: center; }
-    .cta .lede { margin-inline: auto; }
-    footer { padding-block: 2rem 3rem; color: var(--muted); font-size: 0.95rem; border-top: 1px solid var(--border); }
-  </style>
+  <link rel="stylesheet" href="site.css">
 </head>
 <body>
+  <svg class="art-sprite" aria-hidden="true" focusable="false" width="0" height="0" style="position:absolute">
+  <!--
+    Inkstand's illustrations: round-faced figures in a thick, slightly wobbly ink line with flat fills
+    on cream paper. The cast pays homage to writers across cultures and centuries, and the accent
+    colours are the five sentence-length colours from Revise mode.
+  -->
+  <defs>
+    <filter id="wobble" x="-5%" y="-5%" width="110%" height="110%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="2" seed="7" result="noise"/>
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="2.4" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <radialGradient id="glow">
+      <stop offset="0" stop-color="#ffd76a" stop-opacity=".9"/>
+      <stop offset="1" stop-color="#ffd76a" stop-opacity="0"/>
+    </radialGradient>
+    <g id="face" stroke="none">
+      <circle cx="72" cy="62" r="2.7" fill="#2b2540"/>
+      <circle cx="88" cy="62" r="2.7" fill="#2b2540"/>
+      <circle cx="65" cy="70" r="4.5" fill="#f19c9c" opacity=".75"/>
+      <circle cx="95" cy="70" r="4.5" fill="#f19c9c" opacity=".75"/>
+      <path d="M73 72q7 6 14 0" fill="none" stroke="#2b2540" stroke-width="2.6" stroke-linecap="round"/>
+    </g>
+    <ellipse id="shadow" cx="80" cy="151" rx="54" ry="6" fill="#2b2540" opacity=".12"/>
+  </defs>
+
+  <!-- ============ The cast ============ -->
+
+  <!-- A griot of West Africa: history kept in story and song -->
+  <symbol id="w-griot" viewBox="0 0 160 160">
+    <use href="#shadow"/>
+    <g filter="url(#wobble)" stroke="#2b2540" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M36 150C34 112 50 92 80 92s46 20 44 58z" fill="#f2b33d"/>
+      <g fill="#3c5a99" stroke="none"><circle cx="58" cy="118" r="3.2"/><circle cx="72" cy="132" r="3.2"/><circle cx="56" cy="140" r="3.2"/><circle cx="84" cy="112" r="3.2"/><circle cx="96" cy="140" r="3.2"/><circle cx="70" cy="104" r="3.2"/></g>
+      <path d="M62 94l18 18 18-18" fill="none" stroke="#3c5a99" stroke-width="5"/>
+      <circle cx="80" cy="64" r="24" fill="#6e4428"/>
+      <use href="#face"/>
+      <path d="M64 76q16 18 32 0q-6 10-16 10t-16-10z" fill="#e9e3d8"/>
+      <path d="M58 52q0-16 22-16t22 16z" fill="#e2574c"/>
+      <g fill="#fbf4e4" stroke="none"><circle cx="70" cy="45" r="2"/><circle cx="80" cy="42" r="2"/><circle cx="90" cy="45" r="2"/></g>
+      <path d="M118 112l18-48" stroke="#8a5a2b" stroke-width="4"/>
+      <circle cx="116" cy="128" r="17" fill="#c98a4b"/>
+      <path d="M112 122l20-52M120 124l18-48" stroke-width="1.3"/>
+      <circle cx="102" cy="122" r="6" fill="#6e4428"/>
+      <circle cx="130" cy="88" r="6" fill="#6e4428"/>
+      <path d="M8 18h44a8 8 0 0 1 8 8v14a8 8 0 0 1-8 8H30l-9 9v-9H8a8 8 0 0 1-8-8V26a8 8 0 0 1 8-8z" fill="#fbf4e4" transform="translate(2 2)"/>
+      <path d="M16 36q6-8 12 0t12 0t12 0" fill="none" stroke-width="2.4"/>
+    </g>
+  </symbol>
+
+  <!-- A scribe of Mesopotamia: reed stylus pressed into a clay tablet -->
+  <symbol id="w-clay" viewBox="0 0 160 160">
+    <use href="#shadow"/>
+    <g filter="url(#wobble)" stroke="#2b2540" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M44 150C40 114 52 94 80 94s40 20 36 56z" fill="#f2e3c4"/>
+      <path d="M60 98l40 50" fill="none" stroke="#e2574c" stroke-width="6"/>
+      <circle cx="80" cy="64" r="24" fill="#a8693f"/>
+      <use href="#face"/>
+      <path d="M60 72q2 22 20 24 18-2 20-24-8 8-20 8t-20-8z" fill="#2b2540"/>
+      <path d="M57 60q0-22 23-22t23 22q-10-10-23-10t-23 10z" fill="#2b2540"/>
+      <path d="M58 54q22-12 44 0" fill="none" stroke="#3c5a99" stroke-width="5"/>
+      <rect x="84" y="106" width="46" height="34" rx="7" fill="#d9a46c"/>
+      <g fill="none" stroke-width="2.4"><path d="M93 115l5 2-5 2M104 115l5 2-5 2M115 115l5 2-5 2M93 126l5 2-5 2M107 126l5 2-5 2"/></g>
+      <path d="M116 104l18-20" stroke="#8a5a2b" stroke-width="4"/>
+      <circle cx="114" cy="106" r="6" fill="#a8693f"/>
+      <circle cx="88" cy="132" r="6" fill="#a8693f"/>
+    </g>
+  </symbol>
+
+  <!-- A palm-leaf scribe of South and Southeast Asia: letters etched with an iron stylus -->
+  <symbol id="w-palm" viewBox="0 0 160 160">
+    <use href="#shadow"/>
+    <g filter="url(#wobble)" stroke="#2b2540" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M44 150C40 114 52 94 80 94s40 20 36 56z" fill="#fff8ea"/>
+      <path d="M66 96l34 52" fill="none" stroke="#f2b33d" stroke-width="8"/>
+      <path d="M46 144q34 8 68 0" fill="none" stroke="#e2574c" stroke-width="4"/>
+      <circle cx="102" cy="50" r="9" fill="#2b2540"/>
+      <circle cx="80" cy="64" r="24" fill="#8a5533"/>
+      <use href="#face"/>
+      <path d="M57 62q-2-24 23-24t23 24q-8-14-23-14t-23 14z" fill="#2b2540"/>
+      <rect x="58" y="112" width="84" height="13" rx="6.5" fill="#e8c77a"/>
+      <g fill="none" stroke-width="2"><path d="M68 118.5h18M92 118.5h12M110 118.5h20"/></g>
+      <path d="M126 106l16-14" stroke="#6b6b6b" stroke-width="3"/>
+      <circle cx="122" cy="108" r="6" fill="#8a5533"/>
+      <circle cx="66" cy="124" r="6" fill="#8a5533"/>
+    </g>
+  </symbol>
+
+  <!-- A brush poet of East Asia: ink and a hanging scroll -->
+  <symbol id="w-brush" viewBox="0 0 160 160">
+    <use href="#shadow"/>
+    <g filter="url(#wobble)" stroke="#2b2540" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M44 150C40 114 52 94 80 94s40 20 36 56z" fill="#3c5a99"/>
+      <path d="M66 96l14 18 14-18" fill="none" stroke="#fbf4e4" stroke-width="5"/>
+      <circle cx="80" cy="64" r="24" fill="#f1c9a5"/>
+      <use href="#face"/>
+      <path d="M56 62q-2-24 24-24t24 24q-6-14-24-14t-24 14z" fill="#2b2540"/>
+      <circle cx="80" cy="33" r="9" fill="#2b2540"/>
+      <path d="M64 30l32 6" stroke="#e2574c" stroke-width="3"/>
+      <rect x="100" y="80" width="38" height="62" fill="#fbf4e4"/>
+      <rect x="96" y="76" width="46" height="7" rx="3.5" fill="#8a5a2b"/>
+      <rect x="96" y="139" width="46" height="7" rx="3.5" fill="#8a5a2b"/>
+      <g fill="none" stroke-width="2.6"><path d="M128 92v14M128 112v10M119 92v22M110 92v8M110 106v16"/></g>
+      <path d="M86 128l14-16" stroke="#8a5a2b" stroke-width="4"/>
+      <path d="M100 112l4-5" stroke-width="5"/>
+      <circle cx="86" cy="128" r="6" fill="#f1c9a5"/>
+      <circle cx="102" cy="132" r="6" fill="#f1c9a5"/>
+    </g>
+  </symbol>
+
+  <!-- A calligrapher of Persia and the Arab world: the reed pen (qalam) and a book stand -->
+  <symbol id="w-qalam" viewBox="0 0 160 160">
+    <use href="#shadow"/>
+    <g filter="url(#wobble)" stroke="#2b2540" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M40 150C36 114 50 94 76 94s38 20 34 56z" fill="#5aa469"/>
+      <path d="M62 96l14 16 14-16" fill="none" stroke="#fbf4e4" stroke-width="5"/>
+      <circle cx="76" cy="64" r="24" fill="#d39a6a"/>
+      <use href="#face" transform="translate(-4 0)"/>
+      <path d="M60 74q2 18 16 20 14-2 16-20-6 7-16 7t-16-7z" fill="#3a2a22"/>
+      <path d="M50 58q0-28 26-28t26 28q-26-10-52 0z" fill="#fbf4e4"/>
+      <path d="M54 48q22-10 44 2M58 40q18-6 36 2" fill="none" stroke-width="2.2"/>
+      <path d="M100 150l34-36M134 150l-34-36" stroke="#8a5a2b" stroke-width="5"/>
+      <path d="M90 114q13-8 27 0 13-8 27 0v8q-14-8-27 0-14-8-27 0z" fill="#fbf4e4"/>
+      <path d="M96 115q4-5 8 0t8-2M122 115q4-5 8 0t8-2" fill="none" stroke-width="2"/>
+      <path d="M100 104l20-18" stroke="#c98a4b" stroke-width="4"/>
+      <circle cx="100" cy="106" r="6" fill="#d39a6a"/>
+    </g>
+  </symbol>
+
+  <!-- A novelist of Europe: quill, inkpot and candle-lit desk -->
+  <symbol id="w-quill" viewBox="0 0 160 160">
+    <use href="#shadow"/>
+    <g filter="url(#wobble)" stroke="#2b2540" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M40 150C36 114 50 94 76 94s38 20 34 56z" fill="#e2574c"/>
+      <path d="M60 98q16 10 32 0" fill="none" stroke="#fbf4e4" stroke-width="5"/>
+      <circle cx="51" cy="68" r="8" fill="#8a4b2b"/>
+      <circle cx="101" cy="68" r="8" fill="#8a4b2b"/>
+      <circle cx="76" cy="64" r="24" fill="#f1c9a5"/>
+      <use href="#face" transform="translate(-4 0)"/>
+      <path d="M52 62q-2-24 24-24t24 24q-4-12-24-14-20 2-24 14z" fill="#8a4b2b"/>
+      <circle cx="76" cy="34" r="8" fill="#8a4b2b"/>
+      <rect x="84" y="122" width="62" height="8" rx="3" fill="#8a5a2b"/>
+      <path d="M90 122l6-14h28l-4 14z" fill="#fbf4e4"/>
+      <path d="M97 116h18M99 112h12" fill="none" stroke-width="1.8"/>
+      <rect x="128" y="108" width="14" height="14" rx="3" fill="#2b2540"/>
+      <path d="M104 108q12-26 30-34-8 18-26 36z" fill="#fbf4e4"/>
+      <path d="M104 108l26-30" fill="none" stroke-width="1.8"/>
+      <circle cx="104" cy="110" r="6" fill="#f1c9a5"/>
+    </g>
+  </symbol>
+
+  <!-- A reporter at a typewriter, from the newsrooms of the 1900s -->
+  <symbol id="w-type" viewBox="0 0 160 160">
+    <use href="#shadow"/>
+    <g filter="url(#wobble)" stroke="#2b2540" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M38 150C34 114 48 94 74 94s38 20 34 56z" fill="#9cc9e8"/>
+      <path d="M74 98v26" stroke="#e2574c" stroke-width="5"/>
+      <circle cx="74" cy="64" r="24" fill="#d39a6a"/>
+      <use href="#face" transform="translate(-6 0)"/>
+      <g fill="none" stroke-width="2.2"><circle cx="66" cy="62" r="7"/><circle cx="82" cy="62" r="7"/><path d="M73 62h2"/></g>
+      <ellipse cx="74" cy="46" rx="32" ry="6" fill="#4a4458"/>
+      <path d="M56 45q2-20 18-20t18 20z" fill="#4a4458"/>
+      <path d="M57 40h34" stroke="#e2574c" stroke-width="3"/>
+      <rect x="96" y="92" width="38" height="34" fill="#fbf4e4"/>
+      <path d="M102 100h24M102 107h18M102 114h22" fill="none" stroke-width="1.8"/>
+      <rect x="88" y="118" width="54" height="8" rx="4" fill="#2b2540"/>
+      <path d="M84 150l6-24h50l6 24z" fill="#6d8a7a"/>
+      <g fill="#fbf4e4" stroke-width="1.6"><circle cx="98" cy="136" r="3"/><circle cx="108" cy="136" r="3"/><circle cx="118" cy="136" r="3"/><circle cx="128" cy="136" r="3"/><circle cx="103" cy="144" r="3"/><circle cx="113" cy="144" r="3"/><circle cx="123" cy="144" r="3"/></g>
+      <circle cx="94" cy="132" r="6" fill="#d39a6a"/>
+      <circle cx="132" cy="132" r="6" fill="#d39a6a"/>
+    </g>
+  </symbol>
+
+  <!-- You, today: a phone with Inkstand open -->
+  <symbol id="w-today" viewBox="0 0 160 160">
+    <use href="#shadow"/>
+    <g filter="url(#wobble)" stroke="#2b2540" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M40 150C36 114 50 94 76 94s38 20 34 56z" fill="#9b7fd1"/>
+      <path d="M62 98q14 14 28 0" fill="none" stroke-width="3"/>
+      <path d="M68 108v14M84 108v14" stroke="#fbf4e4" stroke-width="3"/>
+      <g fill="#2b2540"><circle cx="56" cy="46" r="12"/><circle cx="76" cy="38" r="14"/><circle cx="96" cy="46" r="12"/><circle cx="52" cy="62" r="9"/><circle cx="100" cy="62" r="9"/></g>
+      <circle cx="76" cy="66" r="22" fill="#a8693f"/>
+      <use href="#face" transform="translate(-4 3)"/>
+      <rect x="98" y="92" width="30" height="50" rx="6" fill="#2b2540"/>
+      <rect x="102" y="98" width="22" height="38" rx="2" fill="#fbf4e4" stroke="none"/>
+      <g stroke="none"><rect x="105" y="103" width="14" height="3.5" rx="1.5" fill="#10b981"/><rect x="105" y="110" width="7" height="3.5" rx="1.5" fill="#ec4899"/><rect x="105" y="117" width="16" height="3.5" rx="1.5" fill="#0ea5e9"/><rect x="105" y="124" width="10" height="3.5" rx="1.5" fill="#f59e0b"/><rect x="105" y="131" width="15" height="3.5" rx="1.5" fill="#8b5cf6"/></g>
+      <circle cx="100" cy="134" r="6" fill="#a8693f"/>
+      <circle cx="126" cy="128" r="6" fill="#a8693f"/>
+    </g>
+  </symbol>
+
+  <!-- ============ Ideas ============ -->
+
+  <!-- Hero: today's writer at a desk, thinking of the tools that came before -->
+  <symbol id="s-hero" viewBox="0 0 480 340">
+    <g filter="url(#wobble)" stroke="#2b2540" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M268 44h150a26 26 0 0 1 26 26v70a26 26 0 0 1-26 26H310l-22 20 4-20h-24a26 26 0 0 1-26-26V70a26 26 0 0 1 26-26z" fill="#fff"/>
+            <rect x="276" y="62" width="40" height="30" rx="6" fill="#d9a46c"/>
+      <path d="M284 72l5 2-5 2M296 72l5 2-5 2M286 82l5 2-5 2" fill="none" stroke-width="2.2"/>
+      <rect x="328" y="70" width="64" height="12" rx="6" fill="#e8c77a"/>
+      <path d="M338 76h16M360 76h22" fill="none" stroke-width="1.8"/>
+      <rect x="404" y="58" width="24" height="44" fill="#fbf4e4"/>
+      <path d="M410 66v10M410 82v12M420 66v18" fill="none" stroke-width="2.2"/>
+      <path d="M282 150q12-28 32-36-8 20-28 38z" fill="#fbf4e4"/>
+      <path d="M330 112q14-8 28 0 14-8 28 0v8q-14-8-28 0-14-8-28 0z" fill="#fbf4e4"/>
+      <rect x="398" y="114" width="34" height="22" rx="4" fill="#6d8a7a"/>
+      <rect x="404" y="104" width="22" height="12" fill="#fbf4e4"/>
+    </g>
+    <ellipse cx="250" cy="326" rx="200" ry="10" fill="#2b2540" opacity=".12"/>
+    <g filter="url(#wobble)" stroke="#2b2540" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="244" cy="186" r="9" fill="#fff"/><circle cx="218" cy="176" r="6" fill="#fff"/>
+      <path d="M352 268q20-70 84-108-30 50-74 110z" fill="#fbf4e4"/>
+      <path d="M356 266l66-92" fill="none" stroke-width="2"/>
+      <rect x="320" y="276" width="64" height="46" rx="14" fill="#1f4e79"/>
+      <rect x="336" y="262" width="32" height="16" rx="4" fill="#1f4e79"/>
+      <path d="M330 290q22 8 44 0" fill="none" stroke="#9cc9e8" stroke-width="3"/>
+      <rect x="400" y="300" width="70" height="22" rx="4" fill="#fbf4e4"/>
+      <rect x="406" y="290" width="62" height="12" rx="3" fill="#f6eedb"/>
+    </g>
+    <use href="#w-today" x="-6" y="62" width="280" height="280"/>
+  </symbol>
+
+  <!-- Step 1: a messy first draft is fine -->
+  <symbol id="s-write" viewBox="0 0 240 160">
+    <g filter="url(#wobble)" stroke="#2b2540" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="60" y="12" width="104" height="136" rx="8" fill="#fbf4e4"/>
+      <g fill="none" stroke-width="2.6">
+        <path d="M76 34q8-4 16 0t16 0 16 0 16 0"/>
+        <path d="M76 52q8-4 16 0t16 0 16 0"/>
+        <path d="M76 70h56"/><path d="M72 64l64 12" stroke="#e2574c"/>
+        <path d="M76 88q8-4 16 0t16 0 16 0 16 0"/>
+        <path d="M76 106q8-4 16 0t16 0"/>
+        <path d="M76 124q8-4 16 0t16 0 16 0"/>
+      </g>
+      <path d="M150 128l50-50 12 12-50 50z" fill="#f2b33d"/>
+      <path d="M150 128l12 12-18 6z" fill="#f1c9a5"/>
+      <path d="M200 78l7-7 12 12-7 7z" fill="#f19c9c"/>
+      <path d="M30 34v14M23 41h14M206 30v10M201 35h10M36 112v10M31 117h10" fill="none" stroke="#f59e0b"/>
+    </g>
+  </symbol>
+
+  <!-- Step 2: Revise shows each sentence in colour -->
+  <symbol id="s-revise" viewBox="0 0 240 160">
+    <g filter="url(#wobble)" stroke="#2b2540" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="40" y="12" width="104" height="136" rx="8" fill="#fbf4e4"/>
+      <g stroke="none">
+        <rect x="54" y="28" width="76" height="9" rx="4" fill="#10b981" opacity=".55"/>
+        <rect x="54" y="44" width="28" height="9" rx="4" fill="#ec4899" opacity=".55"/>
+        <rect x="86" y="44" width="44" height="9" rx="4" fill="#f59e0b" opacity=".55"/>
+        <rect x="54" y="60" width="76" height="9" rx="4" fill="#8b5cf6" opacity=".55"/>
+        <rect x="54" y="76" width="60" height="9" rx="4" fill="#8b5cf6" opacity=".55"/>
+        <rect x="54" y="96" width="76" height="9" rx="4" fill="#0ea5e9" opacity=".55"/>
+        <rect x="54" y="112" width="40" height="9" rx="4" fill="#0ea5e9" opacity=".55"/>
+        <rect x="98" y="112" width="32" height="9" rx="4" fill="#10b981" opacity=".55"/>
+      </g>
+      <path d="M86 89q6 4 12 0t12 0" fill="none" stroke="#c2410c" stroke-width="2.4"/>
+      <path d="M190 124l26 26" stroke="#8a5a2b" stroke-width="10"/>
+      <circle cx="166" cy="98" r="34" fill="#ffffff" fill-opacity=".55"/>
+      <path d="M150 84q8-8 18-8" fill="none" stroke="#ffffff" stroke-width="4"/>
+    </g>
+  </symbol>
+
+  <!-- Step 3: save a copy to share -->
+  <symbol id="s-share" viewBox="0 0 240 160">
+    <g filter="url(#wobble)" stroke="#2b2540" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="20" y="40" width="64" height="84" rx="7" fill="#fbf4e4"/>
+      <path d="M32 58h40M32 70h40M32 82h28M32 94h40M32 106h22" fill="none" stroke-width="2.4"/>
+      <path d="M92 70q30-44 64-44M92 82h64M92 94q30 44 64 44" fill="none" stroke-dasharray="2 9"/>
+      <path d="M146 20l10 6-10 6M146 76l10 6-10 6M146 132l10 6-10 6" fill="none"/>
+      <rect x="166" y="6" width="48" height="40" rx="6" fill="#ffffff"/>
+      <rect x="174" y="14" width="20" height="20" rx="3" fill="#2b579a" stroke="none"/>
+      <path d="M177 19l3 11 4-8 4 8 3-11" fill="none" stroke="#fff" stroke-width="2"/>
+      <path d="M198 18h10M198 26h10M174 40h34" fill="none" stroke-width="2"/>
+      <rect x="166" y="62" width="48" height="40" rx="6" fill="#ffffff"/>
+      <circle cx="190" cy="82" r="13" fill="#9cc9e8"/>
+      <path d="M177 82h26M190 69q-8 13 0 26M190 69q8 13 0 26" fill="none" stroke-width="2"/>
+      <rect x="166" y="118" width="48" height="40" rx="6" fill="#ffffff"/>
+      <path d="M176 130h28M176 138h28M176 146h18" fill="none" stroke-width="2"/>
+    </g>
+  </symbol>
+
+  <!-- Rhythm: sentences all one length drone; a mix sings -->
+  <symbol id="s-rhythm" viewBox="0 0 240 160">
+    <g filter="url(#wobble)" stroke="#2b2540" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="8" y="8" width="224" height="64" rx="10" fill="#ffffff"/>
+      <g fill="#10b981"><rect x="22" y="34" width="14" height="26" rx="3"/><rect x="42" y="34" width="14" height="26" rx="3"/><rect x="62" y="34" width="14" height="26" rx="3"/><rect x="82" y="34" width="14" height="26" rx="3"/><rect x="102" y="34" width="14" height="26" rx="3"/><rect x="122" y="34" width="14" height="26" rx="3"/></g>
+      <circle cx="190" cy="40" r="20" fill="#f1c9a5"/>
+      <path d="M180 38h7M193 38h7M184 49h12" fill="none" stroke-width="2.6"/>
+      <path d="M214 16h8l-8 8h8" fill="none" stroke-width="2"/>
+      <rect x="8" y="88" width="224" height="64" rx="10" fill="#ffffff"/>
+      <rect x="22" y="128" width="14" height="12" rx="3" fill="#ec4899"/>
+      <rect x="42" y="104" width="14" height="36" rx="3" fill="#0ea5e9"/>
+      <rect x="62" y="118" width="14" height="22" rx="3" fill="#10b981"/>
+      <rect x="82" y="96" width="14" height="44" rx="3" fill="#8b5cf6"/>
+      <rect x="102" y="124" width="14" height="16" rx="3" fill="#f59e0b"/>
+      <rect x="122" y="110" width="14" height="30" rx="3" fill="#10b981"/>
+      <circle cx="190" cy="120" r="20" fill="#f1c9a5"/>
+      <g stroke="none" fill="#2b2540"><circle cx="183" cy="116" r="2.6"/><circle cx="197" cy="116" r="2.6"/></g>
+      <path d="M182 124q8 8 16 0" fill="none" stroke-width="2.6"/>
+      <path d="M216 100v-12l8-2v12" fill="none" stroke-width="2.4"/>
+      <circle cx="213" cy="100" r="3.4" fill="#2b2540"/><circle cx="221" cy="98" r="3.4" fill="#2b2540"/>
+    </g>
+  </symbol>
+
+  <!-- Central argument: your point on one card -->
+  <symbol id="s-argument" viewBox="0 0 240 160">
+    <g filter="url(#wobble)" stroke="#2b2540" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M120 112v40" stroke="#8a5a2b" stroke-width="7"/>
+      <rect x="22" y="14" width="196" height="98" rx="12" fill="#fbf4e4"/>
+      <circle cx="54" cy="50" r="20" fill="#ffffff"/><circle cx="54" cy="50" r="12" fill="#e2574c"/><circle cx="54" cy="50" r="4" fill="#ffffff"/>
+      <path d="M86 42q10-5 20 0t20 0 20 0 20 0 20 0M86 60q10-5 20 0t20 0 20 0" fill="none" stroke-width="2.6"/>
+      <rect x="150" y="80" width="54" height="22" rx="11" fill="#dce8f4" stroke-width="2.2"/>
+      
+      <circle cx="120" cy="146" r="8" fill="#d39a6a"/>
+    </g>
+    <text x="177" y="96" text-anchor="middle" font-family="system-ui, sans-serif" font-size="13" font-weight="700" fill="#1f4e79" stroke="none">17/30</text>
+  </symbol>
+
+  <!-- Notes are questions, and "I meant that" is an answer -->
+  <symbol id="s-question" viewBox="0 0 240 160">
+    <g filter="url(#wobble)" stroke="#2b2540" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="14" y="40" width="110" height="108" rx="8" fill="#fbf4e4"/>
+      <path d="M28 60h80M28 76h40M28 92h80M28 108h60M28 124h72" fill="none" stroke-width="2.4"/>
+      <path d="M72 80q4 4 8 0t8 0 8 0 8 0" fill="none" stroke="#c2410c" stroke-width="2.4"/>
+      <path d="M72 74h36" fill="none" stroke="#f59e0b" stroke-width="7" opacity=".6"/>
+      <path d="M110 8h116a10 10 0 0 1 10 10v22a10 10 0 0 1-10 10h-82l-20 18 6-18h-20a10 10 0 0 1-10-10V18a10 10 0 0 1 10-10z" fill="#ffffff"/>
+      
+      <path d="M128 92h98a10 10 0 0 1 10 10v22a10 10 0 0 1-10 10h-20l6 16-24-16h-60a10 10 0 0 1-10-10v-22a10 10 0 0 1 10-10z" fill="#dff3e8"/>
+      
+    </g>
+    <text x="173" y="34" text-anchor="middle" font-family="system-ui, sans-serif" font-size="13" font-weight="600" fill="#2b2540" stroke="none">Look again?</text>
+    <text x="177" y="118" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" font-weight="600" fill="#2b2540" stroke="none">I meant that ✓</text>
+  </symbol>
+
+  <!-- Focus: a lamp lights only the paragraph you're on -->
+  <symbol id="s-focus" viewBox="0 0 240 160">
+    <circle cx="112" cy="80" r="70" fill="url(#glow)"/>
+    <g filter="url(#wobble)" stroke="#2b2540" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="54" y="10" width="116" height="140" rx="8" fill="#fbf4e4"/>
+      <g fill="none" stroke-width="2.6">
+        <path d="M68 28h88M68 38h70" opacity=".2"/>
+        <path d="M68 64h88M68 74h88M68 84h60"/>
+        <path d="M68 112h88M68 122h80M68 132h50" opacity=".2"/>
+      </g>
+      <path d="M200 150v-70" stroke="#8a5a2b" stroke-width="5"/>
+      <path d="M186 150h28" stroke-width="5"/>
+      <path d="M190 54h20l6 26h-32z" fill="#e2574c"/>
+      <circle cx="200" cy="86" r="5" fill="#ffd76a"/>
+      <path d="M200 44v-8M188 48l-6-6M212 48l6-6" fill="none" stroke="#f59e0b"/>
+    </g>
+  </symbol>
+
+  <!-- Private: your writing stays on your device -->
+  <symbol id="s-private" viewBox="0 0 240 160">
+    <g filter="url(#wobble)" stroke="#2b2540" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="22" y="18" width="70" height="128" rx="12" fill="#4a4458"/>
+      <rect x="30" y="30" width="54" height="100" rx="4" fill="#fbf4e4"/>
+      <path d="M38 44h38M38 54h30M38 64h38" fill="none" stroke-width="2.2"/>
+      <path d="M57 116c-12-8-16-14-16-20a8 8 0 0 1 16-2 8 8 0 0 1 16 2c0 6-4 12-16 20z" fill="#e2574c"/>
+      <path d="M154 54a18 18 0 0 1 34-4 14 14 0 0 1 22 14 12 12 0 0 1-4 24h-56a14 14 0 0 1 4-34z" fill="#ffffff"/>
+      <path d="M164 60l30 22M194 60l-30 22" stroke="#e2574c" stroke-width="5"/>
+      <path d="M100 82h30" fill="none" stroke-dasharray="2 8"/>
+      <path d="M136 72v20" stroke="#e2574c" stroke-width="5"/>
+      <rect x="114" y="112" width="30" height="24" rx="5" fill="#f2b33d"/>
+      <path d="M120 112v-8a9 9 0 0 1 18 0v8" fill="none"/>
+      <circle cx="129" cy="124" r="3" fill="#2b2540"/>
+    </g>
+  </symbol>
+
+  <!-- Versions: earlier copies kept, like a bundle of palm leaves -->
+  <symbol id="s-versions" viewBox="0 0 240 160">
+    <g filter="url(#wobble)" stroke="#2b2540" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="40" y="34" width="96" height="112" rx="8" fill="#efe4c9" transform="rotate(-10 88 90)"/>
+      <rect x="54" y="26" width="96" height="112" rx="8" fill="#f6eedb" transform="rotate(-4 102 82)"/>
+      <rect x="70" y="20" width="96" height="112" rx="8" fill="#fbf4e4"/>
+      <path d="M84 40h68M84 52h52M84 64h68M84 76h40M84 88h60" fill="none" stroke-width="2.4"/>
+      <circle cx="172" cy="118" r="28" fill="#ffffff"/>
+      <path d="M172 100v18l12 8" fill="none" stroke-width="3.4"/>
+      <path d="M150 104a26 26 0 0 0-4 6" fill="none"/>
+    </g>
+  </symbol>
+
+  <!-- Home screen: Inkstand as an app icon -->
+  <symbol id="s-home" viewBox="0 0 240 160">
+    <g filter="url(#wobble)" stroke="#2b2540" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="70" y="6" width="100" height="150" rx="16" fill="#4a4458"/>
+      <rect x="78" y="18" width="84" height="126" rx="6" fill="#dce8f4"/>
+      <g stroke-width="2.4"><rect x="88" y="30" width="18" height="18" rx="5" fill="#f19c9c"/><rect x="111" y="30" width="18" height="18" rx="5" fill="#9cc9e8"/><rect x="134" y="30" width="18" height="18" rx="5" fill="#5aa469"/><rect x="88" y="56" width="18" height="18" rx="5" fill="#f2b33d"/><rect x="134" y="56" width="18" height="18" rx="5" fill="#9b7fd1"/><rect x="88" y="82" width="18" height="18" rx="5" fill="#e8c77a"/><rect x="111" y="82" width="18" height="18" rx="5" fill="#f19c9c"/><rect x="134" y="82" width="18" height="18" rx="5" fill="#9cc9e8"/></g>
+      <rect x="108" y="53" width="24" height="24" rx="6" fill="#1f4e79"/>
+      <path d="M114 58h9l4 4v11h-13z" fill="#ffffff" stroke="none"/>
+      <path d="M116 66h8M116 70h6" stroke="#1f4e79" stroke-width="1.6"/>
+      <circle cx="120" cy="65" r="22" fill="none" stroke="#1f4e79" stroke-width="2.4" stroke-dasharray="3 6"/>
+      <path d="M190 52l-6 8M200 70h-10M192 88l-7-5" fill="none" stroke="#f59e0b"/>
+      <path d="M44 120l-4-12M34 128l-12-2" fill="none" stroke="#f59e0b"/>
+    </g>
+  </symbol>
+
+  <!-- Languages: one storyteller, many scripts -->
+  <symbol id="s-langs" viewBox="0 0 320 200">
+    <g font-family="'Noto Sans','Noto Sans Devanagari','Noto Sans Bengali','Noto Sans Tamil','Noto Sans Telugu','Noto Sans Gujarati','Noto Sans Kannada','Noto Sans Malayalam','Noto Sans Gurmukhi','Nirmala UI',system-ui,sans-serif" font-size="22" font-weight="700" text-anchor="middle" fill="#2b2540">
+      <g filter="url(#wobble)" stroke="#2b2540" stroke-width="3" fill="#ffffff">
+        <circle cx="40" cy="40" r="24" fill="#fbf4e4"/><circle cx="104" cy="22" r="20" fill="#dce8f4"/><circle cx="172" cy="18" r="17" fill="#fbf4e4"/><circle cx="238" cy="24" r="21" fill="#f6dfd6"/><circle cx="292" cy="58" r="22" fill="#fbf4e4"/>
+        <circle cx="22" cy="104" r="19" fill="#dff3e8"/><circle cx="298" cy="124" r="20" fill="#dce8f4"/><circle cx="60" cy="160" r="20" fill="#fbf4e4"/><circle cx="264" cy="176" r="19" fill="#f6dfd6"/><circle cx="208" cy="62" r="16" fill="#dff3e8"/>
+      </g>
+      <text x="40" y="48">A</text><text x="104" y="30">अ</text><text x="172" y="26" font-size="18">অ</text><text x="238" y="32">த</text><text x="292" y="66">అ</text>
+      <text x="22" y="112" font-size="19">ગ</text><text x="298" y="132">ಕ</text><text x="60" y="168">മ</text><text x="264" y="184" font-size="19">ਪ</text><text x="208" y="69" font-size="17">म</text>
+    </g>
+    <use href="#w-griot" x="104" y="44" width="156" height="156"/>
+  </symbol>
+</svg>
+
   <div class="wrap">
     <header class="top">
       <a class="brand" href="./"><img src="write/icons/icon.svg" alt="">Inkstand</a>
       <nav>
         <a class="opt" href="#how">How it works</a>
         <a class="opt" href="#tips">Tips</a>
+        <a href="help/">Help</a>
         <a class="btn small" href="write/">Open Inkstand</a>
       </nav>
     </header>
 
     <div class="hero">
       <div>
-        <h1>Write a draft, then revise it until it says what you mean.</h1>
-        <p class="lede">Inkstand is a quiet place to write. Get the first draft down without distractions, then switch to Revise and see how the piece actually reads.</p>
-        <a class="btn" href="write/">Start writing</a>
-        <p class="meta">Free. No sign-up. Works offline once it has loaded, and what you write stays on your device.</p>
+        <h1>A calm place to write, with a kind second reader.</h1>
+        <p class="lede">Write your first draft with nothing in the way. When you're done, tap <b>Revise</b>. Inkstand then shows you, in colour and in plain words, where your writing could be clearer.</p>
+        <div class="actions">
+          <a class="btn" href="write/">Start writing</a>
+          <a class="btn ghost" href="help/">New here? Read the guide</a>
+        </div>
+        <ul class="badges">
+          <li>Free</li><li>No account</li><li>Works without internet</li><li>Your writing stays on your device</li>
+        </ul>
       </div>
-      <img src="shots/tablet-revise-english.png" width="1707" height="1068" alt="Revise mode: sentences coloured by length, notes underlined in the text, and the central argument, rhythm chart and notes in a side panel">
+      <div class="plate"><svg viewBox="0 0 480 340" role="img" aria-label="A writer with a phone, thinking of a clay tablet, a palm leaf, a scroll, a quill, an open book and a typewriter, next to an inkpot and quill"><use href="#s-hero"/></svg></div>
     </div>
   </div>
 
+  <section>
+    <div class="wrap">
+      <h2>You're in good company</h2>
+      <p class="lede">People have been writing, crossing out and trying again for thousands of years, in every language and with whatever was to hand. Inkstand is a small tribute to all of them, and a place for you to join in.</p>
+      <div class="cast">
+        <figure><div class="plate"><svg viewBox="0 0 160 160" role="img" aria-label="A griot playing a kora and telling a story"><use href="#w-griot"/></svg></div><figcaption><b>The storyteller</b>Griots of West Africa, who keep history alive in story and song</figcaption></figure>
+        <figure><div class="plate"><svg viewBox="0 0 160 160" role="img" aria-label="A scribe pressing marks into a clay tablet"><use href="#w-clay"/></svg></div><figcaption><b>Clay and reed</b>Scribes of Mesopotamia, about 5,000 years ago</figcaption></figure>
+        <figure><div class="plate"><svg viewBox="0 0 160 160" role="img" aria-label="A scribe etching a palm leaf with a stylus"><use href="#w-palm"/></svg></div><figcaption><b>Palm leaf and stylus</b>Manuscripts of South and Southeast Asia</figcaption></figure>
+        <figure><div class="plate"><svg viewBox="0 0 160 160" role="img" aria-label="A poet with a brush and a hanging scroll"><use href="#w-brush"/></svg></div><figcaption><b>Brush and ink</b>Poets of China, Korea and Japan</figcaption></figure>
+        <figure><div class="plate"><svg viewBox="0 0 160 160" role="img" aria-label="A calligrapher with a reed pen and a book on a wooden stand"><use href="#w-qalam"/></svg></div><figcaption><b>The reed pen</b>Calligraphers of Persia and the Arab world</figcaption></figure>
+        <figure><div class="plate"><svg viewBox="0 0 160 160" role="img" aria-label="A novelist writing with a quill beside an inkpot"><use href="#w-quill"/></svg></div><figcaption><b>Quill and inkpot</b>Letter writers and novelists of Europe</figcaption></figure>
+        <figure><div class="plate"><svg viewBox="0 0 160 160" role="img" aria-label="A reporter in a hat typing on a typewriter"><use href="#w-type"/></svg></div><figcaption><b>The typewriter</b>Reporters in the newsrooms of the 1900s</figcaption></figure>
+        <figure class="you"><div class="plate"><svg viewBox="0 0 160 160" role="img" aria-label="You, holding a phone with Inkstand open"><use href="#w-today"/></svg></div><figcaption><b>And you</b>Today, on a phone, tablet or computer</figcaption></figure>
+      </div>
+    </div>
+  </section>
+
   <section id="how">
     <div class="wrap">
-      <h2>Two modes: Write and Revise</h2>
-      <div class="two">
+      <h2>How it works, in three steps</h2>
+      <div class="grid three" style="margin-top:1.6rem">
         <div class="card">
-          <h3>Write</h3>
-          <p>A blank page with a few formatting buttons and nothing else. No notes, no suggestions, no score. The only job here is getting the whole draft down.</p>
-          <p>On a tablet or computer, Focus dims every paragraph except the one you're on.</p>
+          <div class="plate"><svg viewBox="0 0 240 160" role="img" aria-label="A page of scribbles with a crossed-out line and a pencil"><use href="#s-write"/></svg></div>
+          <h3><span class="step-no">1</span>Write</h3>
+          <p>Type whatever's in your head. A messy first draft is fine, and Inkstand won't interrupt you. It saves as you type, so there's no Save button to remember.</p>
         </div>
         <div class="card">
-          <h3>Revise</h3>
-          <p>Inkstand reads the draft and leaves notes. Every sentence is coloured by its length, so a run of sentences that all sound the same is easy to spot.</p>
-          <p>A box asks for your central argument in 30 words or fewer. The notes point out clichés, feelings you told instead of showed, vague words, punctuation slips, and the habits that make writing sound machine-made, like "It's not X, it's Y."</p>
-          <p>Tap a note to jump to the words. "Why?" opens a short craft guide, and there's a practice sheet with exercises to warm up on.</p>
+          <div class="plate"><svg viewBox="0 0 240 160" role="img" aria-label="A page with sentences in different colours under a magnifying glass"><use href="#s-revise"/></svg></div>
+          <h3><span class="step-no">2</span>Revise</h3>
+          <p>Tap <b>Revise</b> when you're done. Each sentence gets a colour, and small notes appear next to places that might be worth a second look.</p>
+        </div>
+        <div class="card">
+          <div class="plate"><svg viewBox="0 0 240 160" role="img" aria-label="One page becoming a Word document, a web page and a plain text file"><use href="#s-share"/></svg></div>
+          <h3><span class="step-no">3</span>Share</h3>
+          <p>Happy with it? Save a copy as a Word document, a web page or plain text, and send it wherever you like.</p>
         </div>
       </div>
-      <div class="phones">
-        <img src="shots/phone-editor-hindi.png" width="824" height="1678" loading="lazy" alt="Writing a travel plan in Hindi on a phone">
-        <img src="shots/phone-revise-english.png" width="824" height="1678" loading="lazy" alt="Revise mode on a phone">
-        <img src="shots/phone-notes-english.png" width="824" height="1678" loading="lazy" alt="The list of notes on a phone">
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <h2>What Revise shows you</h2>
+      <p class="lede">Think of it as a friend reading over your shoulder. It doesn't rewrite anything for you. It points, and you decide.</p>
+
+      <div class="explain">
+        <div class="plate"><svg viewBox="0 0 240 160" role="img" aria-label="Top: six bars all the same height next to a sleepy face. Bottom: bars of different heights and colours next to a smiling face and a music note"><use href="#s-rhythm"/></svg></div>
+        <div>
+          <h3>The rhythm of your sentences</h3>
+          <p>Every sentence is coloured by how many words it has:</p>
+          <ul class="colours">
+            <li><i style="background:#ec4899"></i>1 to 3</li>
+            <li><i style="background:#f59e0b"></i>4 to 7</li>
+            <li><i style="background:#10b981"></i>8 to 14</li>
+            <li><i style="background:#0ea5e9"></i>15 to 24</li>
+            <li><i style="background:#8b5cf6"></i>25 or more</li>
+          </ul>
+          <p>When a whole paragraph is one colour, every sentence is about the same length, and reading it feels like hearing one note played over and over. Mix short and long sentences and your writing starts to sound like music.</p>
+        </div>
+      </div>
+
+      <div class="explain">
+        <div class="plate"><svg viewBox="0 0 240 160" role="img" aria-label="A sign with a target and one line of writing, and a counter reading 17 of 30"><use href="#s-argument"/></svg></div>
+        <div>
+          <h3>Your main point, in one line</h3>
+          <p>A box at the top asks: what is this piece really saying? Try to answer in 30 words or fewer. A counter keeps track for you.</p>
+          <p>If you can't fit it in, the draft is probably trying to say too many things at once. That's useful to know, and it tells you where to start.</p>
+        </div>
+      </div>
+
+      <div class="explain">
+        <div class="plate"><svg viewBox="0 0 240 160" role="img" aria-label="A page with one phrase underlined. A bubble asks: Look again? Another bubble answers: I meant that."><use href="#s-question"/></svg></div>
+        <div>
+          <h3>Gentle questions, not corrections</h3>
+          <p>Notes point out tired phrases everyone has heard before, vague words like "very" and "nice", feelings you named instead of showing, punctuation slips, and the habits that make writing sound like a machine wrote it.</p>
+          <p>Each note is a question. If you meant it, keep it. Tap <b>Why?</b> on any note for a short explanation in plain words.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <h2>What it looks like</h2>
+      <p class="lede">Here's Revise on a tablet. The draft is on the left with its colours. Your main point, the rhythm chart and the notes are on the right.</p>
+      <img class="shot" src="shots/tablet-revise-english.png" width="1707" height="1068" loading="lazy" alt="Revise mode on a tablet: sentences coloured by length, notes underlined in the text, and the central argument, rhythm chart and notes in a side panel">
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap explain" style="margin-top:0">
+      <div class="plate"><svg viewBox="0 0 240 160" role="img" aria-label="A phone with a heart and a padlock. A cloud is crossed out."><use href="#s-private"/></svg></div>
+      <div>
+        <h2>Your writing stays with you</h2>
+        <p>Everything you write is kept on your own phone or computer. Nothing is sent over the internet, there's no account to make, and nobody else can read it, me included.</p>
+        <p>After your first visit, Inkstand works even with no internet at all: on a plane, in the hills, or when the signal drops.</p>
       </div>
     </div>
   </section>
 
   <section id="tips">
     <div class="wrap">
-      <h2>Tips for getting the most out of it</h2>
-      <ol class="tips">
-        <li><h3>Finish the draft first</h3><p>Stay in Write until the whole piece is down, even if it's rough. Fixing sentences you might delete later is wasted effort.</p></li>
-        <li><h3>Pin down your argument</h3><p>Fill in the central argument box before reading the notes. If it won't fit in 30 words, the draft probably wanders too, and that's the first thing to fix.</p></li>
-        <li><h3>Read the colours</h3><p>A long stretch of one colour means sentences of the same length, and the prose will feel flat. Split one long sentence or join two short ones.</p></li>
-        <li><h3>Treat notes as questions</h3><p>Every note is something to look at again, not an error. If you meant it, keep it. The notes come from plain rules, not from an AI.</p></li>
-        <li><h3>Use Focus when you're stuck</h3><p>Turn on Focus to dim everything but the paragraph you're writing. Press <kbd>Esc</kbd> to leave it.</p></li>
-        <li><h3>Save versions as you go</h3><p>Press <kbd>Ctrl</kbd>+<kbd>S</kbd> (<kbd>⌘</kbd>+<kbd>S</kbd> on a Mac) to keep a version. Inkstand also keeps one when you switch documents or leave the page. Version history lets you go back.</p></li>
-        <li><h3>Export to keep a copy</h3><p>Your documents live in this browser on this device. Clearing the browser's site data deletes them, so export anything you care about to Word, a web page or plain text.</p></li>
-        <li><h3>Add it to your home screen</h3><p>Open Inkstand, then in Chrome on Android, or Safari on iPhone and iPad, choose Add to Home screen. Inkstand then opens like an app, with or without a connection.</p></li>
-      </ol>
+      <h2>Eight tips for better writing with Inkstand</h2>
+      <div class="grid four" style="margin-top:1.6rem">
+        <div class="card"><div class="plate"><svg viewBox="0 0 240 160" aria-hidden="true"><use href="#s-write"/></svg></div><h3>Finish the draft first</h3><p>Stay in Write until the whole piece is down, even if it's rough. There's no point polishing a sentence you might delete later.</p></div>
+        <div class="card"><div class="plate"><svg viewBox="0 0 240 160" aria-hidden="true"><use href="#s-argument"/></svg></div><h3>Say your point first</h3><p>Before reading any notes, fill in the main-point box. If it won't fit in 30 words, fix that before anything else.</p></div>
+        <div class="card"><div class="plate"><svg viewBox="0 0 240 160" aria-hidden="true"><use href="#s-rhythm"/></svg></div><h3>Look for long runs of one colour</h3><p>That's where the writing feels flat. Split one long sentence in two, or join two short ones.</p></div>
+        <div class="card"><div class="plate"><svg viewBox="0 0 240 160" aria-hidden="true"><use href="#s-question"/></svg></div><h3>You get the final say</h3><p>The notes come from simple rules, not from an AI, and they can't know what you meant. If it's on purpose, leave it.</p></div>
+        <div class="card"><div class="plate"><svg viewBox="0 0 240 160" aria-hidden="true"><use href="#s-focus"/></svg></div><h3>Stuck? Turn on Focus</h3><p>On a tablet or computer, Focus fades everything except the paragraph you're writing. Press <kbd>Esc</kbd> to switch it off.</p></div>
+        <div class="card"><div class="plate"><svg viewBox="0 0 240 160" aria-hidden="true"><use href="#s-versions"/></svg></div><h3>Older versions are kept</h3><p>Inkstand keeps a copy when you leave or switch pieces. Press <kbd>Ctrl</kbd>+<kbd>S</kbd> (<kbd>⌘</kbd>+<kbd>S</kbd> on a Mac) to keep one yourself. The clock button takes you back.</p></div>
+        <div class="card"><div class="plate"><svg viewBox="0 0 240 160" aria-hidden="true"><use href="#s-share"/></svg></div><h3>Keep a copy elsewhere</h3><p>Your writing lives in this browser on this device. If you clear the browser's data, it's gone. Save copies of anything important.</p></div>
+        <div class="card"><div class="plate"><svg viewBox="0 0 240 160" aria-hidden="true"><use href="#s-home"/></svg></div><h3>Put it on your home screen</h3><p>Open Inkstand, then choose <b>Add to Home screen</b> in your browser's menu. It then opens like any other app.</p></div>
+      </div>
     </div>
   </section>
 
   <section>
-    <div class="wrap two">
+    <div class="wrap explain" style="margin-top:0">
+      <div class="plate"><svg viewBox="0 0 320 200" role="img" aria-label="A storyteller surrounded by letters from ten scripts"><use href="#s-langs"/></svg></div>
       <div>
-        <h2>In your language</h2>
-        <p>The interface opens in your device's language when it can, and you can change it in Settings.</p>
-        <p class="langs">English · हिन्दी · বাংলা · मराठी · தமிழ் · తెలుగు · ગુજરાતી · ಕನ್ನಡ · മലയാളം · ਪੰਜਾਬੀ</p>
-        <p>Rhythm and punctuation notes work in all of them, the Hindi danda included. The word-level notes read English for now.</p>
+        <h2>Write in your own language</h2>
+        <p>Inkstand speaks English, हिन्दी, বাংলা, मराठी, தமிழ், తెలుగు, ગુજરાતી, ಕನ್ನಡ, മലയാളം and ਪੰਜਾਬੀ. It opens in your phone's language when it can, and you can change it any time in Settings.</p>
+        <p>Sentence colours and punctuation notes work in all of them. Notes about word choice only understand English for now.</p>
       </div>
-      <img src="shots/tablet-focus-paper.png" width="1707" height="1068" loading="lazy" alt="Focus mode on the Paper theme: only the paragraph being written is at full strength">
     </div>
   </section>
 
   <section>
     <div class="wrap">
-      <h2>Questions</h2>
+      <h2>Questions people ask</h2>
       <dl class="faq">
         <dt>Does it cost anything?</dt>
         <dd>No. There's no account, no ads and nothing to buy.</dd>
+        <dt>Do I need to install anything?</dt>
+        <dd>No. It runs in the web browser you already have, on a phone, tablet or computer. Adding it to your home screen is optional.</dd>
         <dt>Where does my writing go?</dt>
-        <dd>Nowhere. It's saved on your device as you type and never uploaded. Nobody else can read it, me included.</dd>
+        <dd>Nowhere. It's kept on your device as you type and never uploaded.</dd>
         <dt>Does it use AI?</dt>
-        <dd>No. The notes come from rules that run in your browser, so they work offline and give the same answer every time.</dd>
-        <dt>Can I use it on my phone?</dt>
-        <dd>Yes. It works on phones, tablets and computers. Focus mode is for larger screens, and everything else works everywhere.</dd>
-        <dt>How do I move my writing to another device?</dt>
-        <dd>Export it on one device, then use Import on the other. It reads Word, web page and plain text files. There's no sync, because there's no server.</dd>
+        <dd>No. The notes come from simple rules that run on your device, so they work without internet and give the same answer every time.</dd>
+        <dt>Can I move my writing to another phone or computer?</dt>
+        <dd>Yes. Save a copy (a Word document works well), send it to yourself, then use <b>Open file</b> in Inkstand on the other device. There's no automatic syncing, because nothing is stored online.</dd>
+        <dt>I'm not a "writer". Is this for me?</dt>
+        <dd>Yes. Emails, school essays, a speech, a letter, a post, a story for your children: if you're putting words together for someone else to read, Inkstand can help.</dd>
       </dl>
+      <p style="margin-top:1.6rem">More questions? The <a href="help/">step-by-step guide</a> walks through every button.</p>
     </div>
   </section>
 
-  <section class="cta">
+  <section class="center">
     <div class="wrap">
       <h2>Ready when you are</h2>
-      <p class="lede">Open it, start typing, and switch to Revise when the draft is done.</p>
-      <a class="btn" href="write/">Start writing</a>
+      <p class="lede">Open it, start typing, and tap Revise when your draft is done.</p>
+      <div class="actions" style="justify-content:center">
+        <a class="btn" href="write/">Start writing</a>
+        <a class="btn ghost" href="help/">Read the guide</a>
+      </div>
     </div>
   </section>
 
   <footer>
     <div class="wrap">
-      <p>Made by Titas Das. If something breaks or a note is plainly wrong, please <a href="https://github.com/TitasDas/inkstand/issues">open an issue</a>.</p>
+      <p>Made by Titas Das.</p>
+      <p>Something broken, or a note plainly wrong? <a href="https://github.com/TitasDas/inkstand/issues">Tell me here</a>.</p>
     </div>
   </footer>
 </body>

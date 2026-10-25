@@ -4,6 +4,8 @@ Write a draft, then revise it until it says what you mean.
 
 **Use it:** https://titasdas.github.io/inkstand/
 
+New to it? The step-by-step guide is at https://titasdas.github.io/inkstand/help/
+
 <img src="screenshots/tablet-revise-english.png" alt="Revise mode: sentences coloured by length, notes underlined in the text, and the central argument, rhythm chart and notes in a side panel">
 
 I made [Readstand](https://implantintelligence.com/p/readstand) for reading on purpose and keeping what you learn. That's where ideas come in. Inkstand is for when they go back out: a quiet place to draft a piece and then sharpen it before you share it.
